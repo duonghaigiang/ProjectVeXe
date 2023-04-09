@@ -61,17 +61,11 @@ const sidebarLinks = [
     title: "User",
     url: "/manage/user",
   },
-  {
-    title: "Logout",
-    url: "/",
-
-    onClick: () => {},
-  },
 ];
 const Sidebar = () => {
   const { user } = useAuth();
   const sidebarLink = sidebarLinks.filter((item) => {
-    return item.title !== "Post";
+    return item.title !== "Post" && item.title !== "User";
   });
   return (
     <SidebarStyles className="sidebar">

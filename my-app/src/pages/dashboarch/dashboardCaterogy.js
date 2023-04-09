@@ -85,13 +85,13 @@ function DashboardCaterogy(props) {
     getLitmit();
   }, [page]);
   const handleClick = (value) => {
-    setItemStation(value);
+    removeStation(value);
     setRemove(true);
   };
 
-  const removeStation = async () => {
+  const removeStation = async (value) => {
     try {
-      const { id } = itemStation;
+      const { id } = value;
       const res = await axios({
         method: "DELETE",
         url: `http://localhost:7000/api/v1/stations/${id}`,
@@ -108,10 +108,10 @@ function DashboardCaterogy(props) {
       console.log(error);
     }
   };
-  useEffect(() => {
-    setRemove(false);
-    removeStation();
-  }, [remove]);
+  // useEffect(() => {
+  //   setRemove(false);
+  //   removeStation();
+  // }, [remove]);
   const local = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [dataForm, setDataForm] = useState({});

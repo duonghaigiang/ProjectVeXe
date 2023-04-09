@@ -24,6 +24,10 @@ module.exports = {
       description: {
         type: Sequelize.STRING,
       },
+      status: {
+        type: Sequelize.STRING,
+        defaultValue: "con",
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

@@ -1,6 +1,7 @@
-const { User } = require("../models");
+const { User, sequelize } = require("../models");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { Op } = require("sequelize");
 const register = async (req, res) => {
   try {
     const { name, email, password, numberPhone } = req.body;
@@ -19,8 +20,18 @@ const register = async (req, res) => {
 };
 const getListUser = async (req, res) => {
   try {
-    const ListUser = await User.findAll();
-    res.status(200).send(ListUser);
+    const { page, pageSize } = req.query;
+    if (page && pageSize) {
+      const [result, metadata] = await sequelize.query(
+        `
+      SELECT * FROM vexe.users LIMIT ${pageSize} OFFSET  ${page}`
+      );
+
+      res.send(result);
+    } else {
+      const ListUser = await User.findAll();
+      res.status(200).send(ListUser);
+    }
   } catch (error) {
     res.status(500).send(error);
   }
@@ -145,7 +156,47 @@ const uploadAvarta = async (req, res) => {
     res.send("upload thất bại");
   }
 };
+const ChangeInfor = async (req, res) => {
+  try {
+    const { user } = req;
+    const data = req.body;
+    if (data) {
+      const CurrentUSer = await User.findOne({
+        where: {
+          email: user.email,
+        },
+      });
+      Object.assign(CurrentUSer, data); //overWrite
+      await CurrentUSer.save();
+      res.send(CurrentUSer);
+    } else {
+      res.send("không nhận được dữ liệu");
+    }
+  } catch (error) {
+    res.send("Lỗi server");
+  }
+};
+const findUSer = async (req, res) => {
+  try {
+    const { name } = req.query;
+    const user = await User.findAll({
+      where: {
+        name: {
+          [Op.like]: `%${name}%`,
+        },
+      },
+    });
+    if (user) {
+      res.send(user);
+    } else {
+      res.send("không tìm thấy user");
+    }
+  } catch (error) {
+    res.send("không lấy được name");
+  }
+};
 module.exports = {
+  ChangeInfor,
   register,
   getListUser,
   login,
@@ -154,4 +205,5 @@ module.exports = {
   curentUser,
   changePassword,
   uploadAvarta,
+  findUSer,
 };

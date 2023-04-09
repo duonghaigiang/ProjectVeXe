@@ -20,7 +20,7 @@ const checkUser = async (req, res, next) => {
     const { email } = req.body;
     const user = await User.findOne({ where: { email: email } });
     if (user) {
-      res.status(404).send("user existed !!");
+      res.send("user existed !!");
     } else {
       next();
     }

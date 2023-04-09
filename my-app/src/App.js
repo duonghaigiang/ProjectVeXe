@@ -10,6 +10,7 @@ import LoginPages from "./pages/login/LoginPages";
 import RegisterPage from "./pages/register/registerPage";
 import Trip from "./pages/trip/Trip";
 import HomeTrip from "./pages/home/HomeStation";
+import DashboarchListUser from "./pages/dashboarch/dashboarchListUser";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             path="/registerPage"
             element={<RegisterPage></RegisterPage>}
           ></Route>
+
           <Route path="/trip" element={<HomeTrip></HomeTrip>}></Route>
           <Route path="/loginPage" element={<LoginPages></LoginPages>}></Route>
           <Route path="/" element={<Home></Home>}></Route>
@@ -35,6 +37,10 @@ function App() {
             <Route
               path="/manage/category"
               element={<DashboardCaterogy></DashboardCaterogy>}
+            ></Route>
+            <Route
+              path="/manage/user"
+              element={<DashboarchListUser></DashboarchListUser>}
             ></Route>
           </Route>
         </Routes>

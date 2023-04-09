@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useAuth } from "../../components/context/auth/authContext";
 import styled from "styled-components";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Field from "../../components/field/Field";
 import Input from "../../components/input/Input";
 import { useForm } from "react-hook-form";
@@ -44,6 +44,13 @@ const DashboarchPageStyle = styled.div`
   }
   .input {
     width: 600px;
+  }
+  .logout {
+    display: inline-block;
+    cursor: pointer;
+    border: 2px solid ${(props) => props.theme.primary};
+    border-radius: 12px;
+    padding: 4px;
   }
 `;
 function DashboarchPage(props) {
@@ -141,6 +148,11 @@ function DashboarchPage(props) {
       toast.error("error ");
     }
   };
+  const navi = useNavigate();
+  const handleClick = () => {
+    localStorage.setItem("token", "");
+    navi("/loginPage");
+  };
   return (
     <DashboarchPageStyle>
       <div className="dashboard_infor">
@@ -148,6 +160,10 @@ function DashboarchPage(props) {
         <div>Email : {user.email}</div>
         <div>Name : {user.name}</div>
         <div>Số điện thoại : {user.numberPhone}</div>
+        <div onClick={handleClick} className="logout">
+          {" "}
+          Đăng xuất{" "}
+        </div>
       </div>
       <div className="dashboard_password">
         <div>Mật khẩu : *******</div>
