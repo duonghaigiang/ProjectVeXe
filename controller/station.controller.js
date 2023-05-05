@@ -43,6 +43,19 @@ const getListStation = async (req, res) => {
       });
       res.status(200).send(getListFilter);
       return getListFilter;
+    } else if (province) {
+      const station = await Station.findAll({
+        where: {
+          province: {
+            [Op.like]: `%${province}%`,
+          },
+        },
+      });
+      if (station) {
+        res.send(station);
+      } else {
+        res.send("không tìm thấy");
+      }
     } else if (name) {
       const getListFilter = await Station.findAll({
         where: {
@@ -101,7 +114,7 @@ const updateStation = async (req, res) => {
 const removeStation = async (req, res) => {
   const { id } = req.params;
   try {
-    const getListStaion = await Station.destroy({
+    await Station.destroy({
       where: {
         id: id,
       },

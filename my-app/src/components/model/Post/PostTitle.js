@@ -5,6 +5,7 @@ PostTitle.propTypes = {};
 const PostTitleStyled = styled.h2`
   font-weight: 600;
   line-height: 2;
+  color: ${(props) => props.theme.primary};
 `;
 function PostTitle({ children }) {
   return <PostTitleStyled>{children}</PostTitleStyled>;

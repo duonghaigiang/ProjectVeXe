@@ -7,9 +7,10 @@ const PostMetaStyled = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 600;
   color: #fff;
+  font-style: italic;
   margin-top: auto;
   .time {
   }

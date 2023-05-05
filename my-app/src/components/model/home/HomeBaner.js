@@ -60,6 +60,7 @@ function HomeBanner(props) {
     try {
       const params = { address: data.address, province: data.province };
       const search = queryString.stringify(params);
+
       navi(`/?${search}`);
       const res = await axios({
         method: "GET",

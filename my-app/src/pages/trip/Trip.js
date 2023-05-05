@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useAuth } from "../../components/context/auth/authContext";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -8,6 +8,7 @@ import queryString from "query-string";
 import styled from "styled-components";
 import useLoadMore from "../../components/hook/hookLoadingMore/HookLoadingMore";
 import Btn from "./../../components/button/btn";
+import { Modal } from "antd";
 Trip.propTypes = {};
 const WrapperStyle = styled.div`
   margin: 20px;
@@ -58,7 +59,16 @@ function Trip(props) {
   }, [trip]);
 
   const [displayedItems, loadMore, canLoadMore] = useLoadMore(trip, 3);
+  const [showModal, setShowModal] = useState(false);
+  const { user } = useAuth();
 
+  const handleCreateTicket = () => {
+    setShowModal(!showModal);
+    console.log(user);
+  };
+  const handleCannel = () => {
+    setShowModal(false);
+  };
   return (
     <WrapperStyle>
       <Heading>Các trạm chuyến đi :{trip.length} chuyến</Heading>
@@ -70,7 +80,28 @@ function Trip(props) {
               <div className="Item">{item.address}</div>
               <div className="Item">{item.numberPhone}</div>
               <div className="Item">{item.description}</div>
-              <Btn className="btn">Đặt vé</Btn>
+              <Btn className="btn" onClick={() => handleCreateTicket()}>
+                Đặt vé
+              </Btn>
+              <Modal
+                title="confirm ticket"
+                open={showModal}
+                onCancel={handleCannel}
+                onOk={handleCreateTicket}
+                cancelText={false}
+              >
+                <div>
+                  <div></div>
+                  <h3>Thông tin tài khoản</h3>
+                  <div>{user.email}</div>
+                  <div>{user.name}</div>
+                  <div>{user.numberPhone}</div>
+                  <h3>Nhà xe</h3>
+                  <div>{item.name}</div>
+                  <div>{item.address}</div>
+                  <div>{item.numberPhone}</div>
+                </div>
+              </Modal>
             </div>
           ))}
         </div>

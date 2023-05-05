@@ -11,6 +11,7 @@ import RegisterPage from "./pages/register/registerPage";
 import Trip from "./pages/trip/Trip";
 import HomeTrip from "./pages/home/HomeStation";
 import DashboarchListUser from "./pages/dashboarch/dashboarchListUser";
+import Posts from "./pages/posts/posts";
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
               path="/manage/user"
               element={<DashboarchListUser></DashboarchListUser>}
             ></Route>
+            <Route path="/adminPosts" element={<Posts></Posts>}></Route>
           </Route>
         </Routes>
       </AuthContextProvider>

@@ -107,9 +107,13 @@ function DashboarchListUser(props) {
             <td className="table_Row">{item.email}</td>
             <td className="table_Row"> {item.numberPhone}</td>
             <div className="table_RU">
-              <div className="table_R_item" onClick={() => removeUser(item)}>
-                Xóa
-              </div>
+              {item.type != "admin" ? (
+                <div className="table_R_item" onClick={() => removeUser(item)}>
+                  Xóa
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </tr>
         ))}

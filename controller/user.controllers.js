@@ -62,6 +62,7 @@ const login = async (req, res) => {
       if (checkAuth) {
         const token = jwt.sign(
           {
+            id: getUSer.id,
             email: getUSer.email,
             type: getUSer.type,
             name: getUSer.name,

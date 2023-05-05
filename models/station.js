@@ -8,9 +8,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     //tương tác database , migration tạo table trong database
-    static associate({ Trip }) {
+    static associate({ Trip, Ticket }) {
       // define association here
       this.hasMany(Trip, { foreignKey: "fromStation", as: "from" });
+      this.hasMany(Ticket, { foreignKey: "trip_id" });
     }
   }
   Station.init(
@@ -43,6 +44,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       status: {
+        type: DataTypes.STRING,
+      },
+      price: {
+        type: DataTypes.STRING,
+      },
+      email: {
         type: DataTypes.STRING,
       },
     },

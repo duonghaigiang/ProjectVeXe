@@ -36,10 +36,11 @@ const WrapperStyled = styled.div`
     .table_R_item {
       margin: 0 4px;
       padding: 2px;
+      background-color: red;
       border-radius: 4px;
+      color: #fff;
       :hover {
         transition: 0.2s linear;
-        background-color: red;
         cursor: pointer;
         color: #fff;
       }
@@ -47,11 +48,12 @@ const WrapperStyled = styled.div`
     .table_U_item {
       padding: 2px;
       border-radius: 4px;
+      background-color: ${(props) => props.theme.primary};
+      color: #fff;
 
       margin: 0 4px;
       :hover {
         transition: 0.2s linear;
-        background-color: ${(props) => props.theme.primary};
         cursor: pointer;
         color: #fff;
       }
@@ -65,7 +67,7 @@ const WrapperStyled = styled.div`
 `;
 DashboardCaterogy.propTypes = {};
 function DashboardCaterogy(props) {
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [station, setStation] = useState([]);
   const [itemStation, setItemStation] = useState({});
   const [remove, setRemove] = useState(false);
@@ -228,7 +230,7 @@ function DashboardCaterogy(props) {
           <div>
             {station.map((item, index) => (
               <tr key={item.id} className="tableStation">
-                <td className="table_Row">{(page - 1) * pageSize + index}</td>
+                <td className="table_Row">{page * pageSize + index}</td>
                 <td className="table_Row">{item.name}</td>
                 <td className="table_Row">{item.address}</td>
                 <td className="table_Row"> {item.province}</td>
@@ -270,9 +272,9 @@ function DashboardCaterogy(props) {
           <div className="pagination">
             <Pagination
               total={50}
-              current={page}
+              current={page + 1}
               pageSize={pageSize}
-              onChange={(page) => setPage(page)}
+              onChange={(page) => setPage(page - 1)}
             ></Pagination>
           </div>
         }

@@ -15,10 +15,15 @@ function AuthContextProvider({ children }) {
   ];
   const [trip, setTrip] = useState([]);
   const values = { user, setUser, setToken, Station, trip, setTrip };
+  const navi = useNavigate();
+
   useEffect(() => {
     curentUser();
+    if (user) {
+      navi("/");
+      return;
+    }
   }, [token]);
-  const navi = useNavigate();
   const curentUser = () => {
     if (token) {
       axios
