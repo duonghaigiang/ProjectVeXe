@@ -4,6 +4,7 @@ const {
   authentication,
 } = require("../middleware/auth/authentication");
 const { author } = require("../middleware/auth/authorize");
+const { checkPass } = require("../middleware/auth/checkPass");
 const {
   register,
   getListUser,
@@ -13,6 +14,7 @@ const {
   curentUser,
   changePassword,
   uploadAvarta,
+  changeMail,
   ChangeInfor,
   findUSer,
 } = require("../controller/user.controllers");
@@ -25,7 +27,8 @@ userRouter.get("/register/:id", authentication, author, getDetail);
 userRouter.delete("/register/:id", delecteUser);
 userRouter.get("/user", authentication, curentUser);
 userRouter.put("/user", authentication, changePassword);
-userRouter.put("/userChange", authentication, ChangeInfor);
+userRouter.put("/changmail", authentication, changeMail);
+userRouter.put("/changeInfor", authentication, ChangeInfor);
 userRouter.get("/findUser", authentication, author, findUSer);
 userRouter.post(
   "/upload_img",

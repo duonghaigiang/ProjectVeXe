@@ -159,19 +159,24 @@ const uploadAvarta = async (req, res) => {
 };
 const ChangeInfor = async (req, res) => {
   try {
-    const { user } = req;
     const data = req.body;
-    if (data) {
-      const CurrentUSer = await User.findOne({
-        where: {
-          email: user.email,
-        },
-      });
-      Object.assign(CurrentUSer, data); //overWrite
-      await CurrentUSer.save();
-      res.send(CurrentUSer);
+    const { user } = req;
+    const getUser = await User.findOne({
+      where: {
+        email: user.email,
+      },
+    });
+    if (getUser) {
+      const verify = bcryptjs.compareSync(data.passwordd, getUser.password);
+      if (verify) {
+        Object.assign(getUser, data); //overWrite
+        await getUser.save();
+        res.send("Đã cập nhật thành công");
+      } else {
+        res.send("Password không đúng");
+      }
     } else {
-      res.send("không nhận được dữ liệu");
+      res.send("không tìm thấy email");
     }
   } catch (error) {
     res.send("Lỗi server");
@@ -196,6 +201,28 @@ const findUSer = async (req, res) => {
     res.send("không lấy được name");
   }
 };
+const changeMail = async (req, res) => {
+  try {
+    const { password, email } = req.body;
+    const curentUser = req.user;
+    const user = await User.findOne({
+      where: {
+        email: curentUser.email,
+      },
+    });
+    const checkPassword = bcryptjs.compareSync(password, user.password);
+    if (checkPassword) {
+      user.email = email;
+      await user.save();
+      res.send("đã đổi email thành công!");
+    } else {
+      res.send("Mật khẩu của bạn không đúng");
+    }
+  } catch (error) {
+    res.send("Không lấy được dữ liệu");
+  }
+};
+
 module.exports = {
   ChangeInfor,
   register,
@@ -207,4 +234,5 @@ module.exports = {
   changePassword,
   uploadAvarta,
   findUSer,
+  changeMail,
 };

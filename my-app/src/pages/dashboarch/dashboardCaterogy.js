@@ -258,7 +258,7 @@ function DashboardCaterogy(props) {
           <div>
             {station.map((item, index) => (
               <tr key={item.id} className="tableStation">
-                <td className="table_Row">{(page - 1) * pageSize + index}</td>
+                <td className="table_Row">{page * pageSize + index}</td>
                 <td className="table_Row">{item.name}</td>
                 <td className="table_Row">{item.address}</td>
                 <td className="table_Row"> {item.province}</td>

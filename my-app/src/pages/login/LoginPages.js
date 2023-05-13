@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -12,6 +12,7 @@ import { useAuth } from "../../components/context/auth/authContext";
 import Field from "../../components/field/Field";
 import Input from "../../components/input/Input";
 import InputPassword from "./../../components/input/InputPassword";
+import { Spin } from "antd";
 
 LoginPages.propTypes = {};
 const Wrapper = styled.div`
@@ -62,7 +63,7 @@ function LoginPages(props) {
     formState: { errors },
   } = useForm({ mode: { onchange }, resolver: yupResolver(schema) });
   const { user, setUser, setToken } = useAuth();
-
+  const [loading, setLoading] = useState(false);
   const handleOnSubmit = async (value) => {
     try {
       const res = await axios({
@@ -76,7 +77,6 @@ function LoginPages(props) {
         // document.cookie = `token = ${res.data.token}`;
         localStorage.setItem("token", `${res.data.token}`);
         setToken(localStorage.getItem("token"));
-
         navi("/");
         setUser(user);
         return res.data;
@@ -86,6 +86,8 @@ function LoginPages(props) {
     } catch (error) {
       toast.error("Error !!");
       return null;
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -100,42 +102,83 @@ function LoginPages(props) {
   }, [errors]);
   return (
     <Wrapper>
-      <Container_form text="Đăng nhập">
-        <div>
-          <form className="form" onSubmit={handleSubmit(handleOnSubmit)}>
-            <Field>
-              <label htmlFor="email" style={{ cursor: "pointer" }}>
-                Email
-              </label>
-              <Input
-                type="text"
-                placeholder="input your email"
-                name="email"
-                control={control}
-              ></Input>
-            </Field>
-            <Field>
-              <label htmlFor="password" style={{ cursor: "pointer" }}>
-                Password
-              </label>
-              <InputPassword
-                type="password"
-                placeholder="input your password"
-                name="password"
-                control={control}
-              ></InputPassword>
-            </Field>
-            <div className="btn_footer">
-              <Btn type="submit" className="btn_footer__item">
-                Đăng nhập
-              </Btn>
-              <NavLink to={"/registerPage"} className="btn_footer__title">
-                Bạn chưa có tài khoản !
-              </NavLink>
+      {loading ? (
+        <Spin tip="Loading" size="small">
+          <Container_form text="Đăng nhập">
+            <div>
+              <form className="form" onSubmit={handleSubmit(handleOnSubmit)}>
+                <Field>
+                  <label htmlFor="email" style={{ cursor: "pointer" }}>
+                    Email
+                  </label>
+                  <Input
+                    type="text"
+                    placeholder="input your email"
+                    name="email"
+                    control={control}
+                  ></Input>
+                </Field>
+                <Field>
+                  <label htmlFor="password" style={{ cursor: "pointer" }}>
+                    Password
+                  </label>
+                  <InputPassword
+                    type="password"
+                    placeholder="input your password"
+                    name="password"
+                    control={control}
+                  ></InputPassword>
+                </Field>
+                <div className="btn_footer">
+                  <Btn type="submit" className="btn_footer__item">
+                    Đăng nhập
+                  </Btn>
+                  <NavLink to={"/registerPage"} className="btn_footer__title">
+                    Bạn chưa có tài khoản !
+                  </NavLink>
+                </div>
+              </form>
             </div>
-          </form>
-        </div>
-      </Container_form>
+          </Container_form>
+        </Spin>
+      ) : (
+        <Container_form text="Đăng nhập">
+          <div>
+            <form className="form" onSubmit={handleSubmit(handleOnSubmit)}>
+              <Field>
+                <label htmlFor="email" style={{ cursor: "pointer" }}>
+                  Email
+                </label>
+                <Input
+                  type="text"
+                  placeholder="input your email"
+                  name="email"
+                  control={control}
+                ></Input>
+              </Field>
+              <Field>
+                <label htmlFor="password" style={{ cursor: "pointer" }}>
+                  Password
+                </label>
+                <InputPassword
+                  type="password"
+                  placeholder="input your password"
+                  name="password"
+                  control={control}
+                ></InputPassword>
+              </Field>
+              <div className="btn_footer">
+                <Btn type="submit" className="btn_footer__item">
+                  Đăng nhập
+                </Btn>
+                <NavLink to={"/registerPage"} className="btn_footer__title">
+                  Bạn chưa có tài khoản !
+                </NavLink>
+              </div>
+            </form>
+          </div>
+        </Container_form>
+      )}
     </Wrapper>
   );
 }

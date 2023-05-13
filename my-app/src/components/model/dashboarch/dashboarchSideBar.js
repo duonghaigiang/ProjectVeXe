@@ -2,9 +2,18 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { useAuth } from "../../context/auth/authContext";
+import IconUSer from "./../../icon/IconUSer";
+import IconPost from "./../../icon/IconPost";
+import IconCategory from "./../../icon/IconCategory";
+import IconManyUser from "./../../icon/IconmanyUSer";
+import IconEdit from "./../../icon/IconEdit";
+import IconTicket from "./../../icon/IconTicket";
+const StyledSpan = styled.span`
+  color: ${(props) => props.theme.primary};
+`;
 const SidebarStyles = styled.div`
   width: 300px;
-  background: #ccc;
+  background: #282828;
   box-shadow: 10px 10px 20px rgba(218, 213, 213, 0.15);
   border-radius: 12px;
   .sidebar-logo {
@@ -18,6 +27,7 @@ const SidebarStyles = styled.div`
     margin-bottom: 20px;
     padding: 20px 20px 0;
   }
+
   .menu-item {
     border-radius: 10px;
     display: flex;
@@ -40,40 +50,76 @@ const SidebarStyles = styled.div`
     span {
       margin-left: 12px;
       text-decoration: none;
-      color: #000;
+      color: ${(props) => props.theme.primary};
     }
+  }
+  .displayFlex {
+    display: flex;
   }
 `;
 const sidebarLinks = [
   {
-    title: "Thông tin tài khoản",
+    title: (
+      <div className="displayFlex">
+        <IconUSer />
+        {" Thông tin tài khoản"}
+      </div>
+    ),
     url: "/dashboard",
   },
   {
-    title: "Post",
+    title: (
+      <div className="displayFlex">
+        <IconPost />
+        {"Thêm Trạm Xe"}
+      </div>
+    ),
     url: "/manage/post",
+    visibility: "adminOnly",
   },
   {
-    title: "Category",
+    title: (
+      <div className="displayFlex">
+        <IconCategory />
+        {" Danh Sách Trạm Xe"}
+      </div>
+    ),
     url: "/manage/category",
   },
   {
-    title: "User",
+    title: (
+      <div className="displayFlex">
+        <IconManyUser></IconManyUser>
+        {"Quản lý người dùng"}
+      </div>
+    ),
     url: "/manage/user",
+    visibility: "adminOnly",
   },
   {
-    title: "Change Posts",
+    title: (
+      <div className="displayFlex">
+        <IconEdit></IconEdit>
+        {"Cập nhật tuyến đường phổ biến"}
+      </div>
+    ),
     url: "/adminPosts",
+    visibility: "adminOnly",
+  },
+  {
+    title: (
+      <div className="displayFlex">
+        <IconTicket />
+        {" Ticket"}
+      </div>
+    ),
+    url: "/ticket",
   },
 ];
 const Sidebar = () => {
   const { user } = useAuth();
   const sidebarLink = sidebarLinks.filter((item) => {
-    return (
-      item.title !== "Post" &&
-      item.title !== "User" &&
-      item.title !== "Change Posts"
-    );
+    return item.visibility !== "adminOnly";
   });
   return (
     <SidebarStyles className="sidebar">
@@ -81,7 +127,7 @@ const Sidebar = () => {
         <NavLink to="/" className="header_dashboard">
           <img srcSet="/logo.webp 2x" alt="" />
 
-          <span>VEXE</span>
+          <StyledSpan>VEXE</StyledSpan>
         </NavLink>
       </div>
       {user.type === "admin"

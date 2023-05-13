@@ -9,6 +9,8 @@ import styled from "styled-components";
 import useLoadMore from "../../components/hook/hookLoadingMore/HookLoadingMore";
 import Btn from "./../../components/button/btn";
 import { Modal } from "antd";
+import axios from "axios";
+
 Trip.propTypes = {};
 const WrapperStyle = styled.div`
   margin: 20px;
@@ -64,10 +66,34 @@ function Trip(props) {
 
   const handleCreateTicket = () => {
     setShowModal(!showModal);
-    console.log(user);
   };
   const handleCannel = () => {
     setShowModal(false);
+  };
+  const handleOk = (station) => () => {
+    createTicket(station);
+  };
+  const createTicket = async (dataTicket) => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios({
+        method: "POST",
+        url: "http://localhost:7000/api/v1/ticket/create",
+        headers: {
+          token: `${token}`,
+        },
+        data: {
+          Station_id: dataTicket.id,
+        },
+      });
+      if (res) {
+        toast.success(res.data);
+      } else {
+        toast.warning("awarnig");
+      }
+    } catch (error) {
+      toast.error("eror");
+    }
   };
   return (
     <WrapperStyle>
@@ -84,18 +110,18 @@ function Trip(props) {
                 Đặt vé
               </Btn>
               <Modal
-                title="confirm ticket"
+                title="Xác Nhận Thông Tin"
                 open={showModal}
                 onCancel={handleCannel}
-                onOk={handleCreateTicket}
+                onOk={handleOk(item)}
                 cancelText={false}
               >
                 <div>
                   <div></div>
                   <h3>Thông tin tài khoản</h3>
-                  <div>{user.email}</div>
-                  <div>{user.name}</div>
-                  <div>{user.numberPhone}</div>
+                  <div>{user?.email}</div>
+                  <div>{user?.name}</div>
+                  <div>{user?.numberPhone}</div>
                   <h3>Nhà xe</h3>
                   <div>{item.name}</div>
                   <div>{item.address}</div>

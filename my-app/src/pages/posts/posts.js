@@ -92,6 +92,9 @@ function Posts(props) {
       data: {
         ...value,
       },
+      headers: {
+        token: localStorage.getItem("token"),
+      },
     });
     if (res) {
       toast.success(res.data);

@@ -12,6 +12,7 @@ import Trip from "./pages/trip/Trip";
 import HomeTrip from "./pages/home/HomeStation";
 import DashboarchListUser from "./pages/dashboarch/dashboarchListUser";
 import Posts from "./pages/posts/posts";
+import DashboarchTicket from "./pages/dashboarch/dashboarchTicket";
 
 function App() {
   return (
@@ -44,6 +45,10 @@ function App() {
               element={<DashboarchListUser></DashboarchListUser>}
             ></Route>
             <Route path="/adminPosts" element={<Posts></Posts>}></Route>
+            <Route
+              path="/ticket"
+              element={<DashboarchTicket></DashboarchTicket>}
+            ></Route>
           </Route>
         </Routes>
       </AuthContextProvider>

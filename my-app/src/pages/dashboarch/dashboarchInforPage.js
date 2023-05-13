@@ -12,6 +12,7 @@ import InputPassword from "../../components/input/InputPassword";
 import Btn from "../../components/button/btn";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { Modal } from "antd";
 
 DashboarchPage.propTypes = {};
 const DashboarchPageStyle = styled.div`
@@ -34,6 +35,10 @@ const DashboarchPageStyle = styled.div`
       color: ${(props) => props.theme.primary};
     }
   }
+  .changeMail {
+    margin-left: 0px;
+    color: ${(props) => props.theme.primary};
+  }
   .dashboard_footer {
     display: flex;
     justify-content: flex-end;
@@ -51,6 +56,15 @@ const DashboarchPageStyle = styled.div`
     border: 2px solid ${(props) => props.theme.primary};
     border-radius: 12px;
     padding: 4px;
+  }
+  .avartar {
+    border-radius: 12px;
+    border: 2px solid ${(props) => props.theme.primary};
+    margin: 24px;
+    width: 150px;
+    height: 30px;
+    color: #000;
+    cursor: pointer;
   }
 `;
 function DashboarchPage(props) {
@@ -76,6 +90,16 @@ function DashboarchPage(props) {
       .min(5, "password must be least 6 character")
       .required("please enter your newpassword"),
   });
+  const schemaInfor = yup.object({
+    passwordd: yup
+      .string()
+      .min(5, "password must be least 6 character")
+      .required("please enter your password"),
+    email: yup
+      .string()
+      .email("please enter valid email")
+      .required("please enter your email"),
+  });
   const {
     control,
     handleSubmit,
@@ -84,9 +108,15 @@ function DashboarchPage(props) {
     mode: "onChange",
     resolver: yupResolver(schema),
   });
+
   const form1 = useForm({
     mode: "onChange",
   });
+  const form2 = useForm({
+    mode: "onChange",
+    resolver: yupResolver(schemaInfor),
+  });
+
   const handleSubmitFormChangePassword = async (value) => {
     try {
       const token = localStorage.getItem("token");
@@ -153,16 +183,70 @@ function DashboarchPage(props) {
     localStorage.setItem("token", "");
     navi("/loginPage");
   };
+
+  const [showModal, setShowModal] = useState(false);
+  const handleOk = () => {
+    setShowModal((pre) => !pre);
+    form2.handleSubmit(handleOnSubmit)();
+  };
+
+  const update = async (value) => {
+    try {
+      const res = await axios({
+        method: "PUT",
+        url: "http://localhost:7000/api/v1/user/changeInfor",
+        headers: {
+          token: localStorage.getItem("token"),
+        },
+        data: { ...value },
+      });
+      if (res) {
+        if (res.data === "Đã cập nhật thành công") {
+          toast.success(res.data);
+        } else {
+          toast.success(res.data);
+        }
+      } else {
+        toast.error("Thất Bại");
+      }
+    } catch (error) {
+      toast.error("lỗi");
+    }
+  };
+  useEffect(() => {
+    const ListErrors = Object.values(form2.formState.errors);
+    if (ListErrors.length > 0) {
+      ListErrors.map((error) => toast.error(error.message), {
+        pauseOnHover: false,
+        delay: 0,
+      });
+    }
+  }, [form2.formState.errors]);
+  const handleCannel = () => {
+    setShowModal((pre) => !pre);
+  };
+  const handleChangeInfor = () => {
+    setShowModal((pre) => !pre);
+  };
+  const handleOnSubmit = (value) => {
+    console.log(value);
+    update(value);
+  };
   return (
     <DashboarchPageStyle>
-      <div className="dashboard_infor">
-        {" "}
-        <div>Email : {user.email}</div>
-        <div>Name : {user.name}</div>
-        <div>Số điện thoại : {user.numberPhone}</div>
-        <div onClick={handleClick} className="logout">
+      <div style={{ display: "flex" }}>
+        <div className="dashboard_infor">
           {" "}
-          Đăng xuất{" "}
+          <NavLink className="changeMail">Email : {user.email}</NavLink>
+          <div>Tên : {user.name}</div>
+          <div>Số điện thoại : {user.numberPhone}</div>
+          <div onClick={handleClick} className="logout">
+            {" "}
+            Đăng xuất{" "}
+          </div>
+        </div>
+        <div className="avartar" onClick={handleChangeInfor}>
+          Thay đổi thông tin
         </div>
       </div>
       <div className="dashboard_password">
@@ -173,7 +257,7 @@ function DashboarchPage(props) {
         >
           Thay đổi mật khẩu{" "}
         </NavLink>
-        <div>Upload Avatar !</div>
+        <div>Update Avatar !</div>
         <NavLink
           className="dashboard_password_change"
           onClick={handleClickChangeAvatar}
@@ -238,6 +322,55 @@ function DashboarchPage(props) {
       ) : (
         ""
       )}
+      <Modal
+        title="Thay đổi thông tin"
+        visible={showModal}
+        onCancel={handleCannel}
+        onOk={form2.handleSubmit(handleOnSubmit)}
+        cancelText={false}
+      >
+        <form>
+          <Field>
+            <label>Xác nhận password</label>
+            <InputPassword
+              type="password"
+              placeholder="Nhập password của bạn"
+              name="passwordd"
+              control={form2.control}
+            ></InputPassword>
+          </Field>
+          <Field>
+            <label>Email muốn thay đổi</label>
+            <Input
+              defaultValue={user ? user.email : ""}
+              type="email"
+              placeholder="Nhập email của bạn"
+              name="email"
+              control={form2.control}
+            ></Input>
+          </Field>
+          <Field>
+            <label>Tên muốn thay đổi</label>
+            <Input
+              defaultValue={user ? user.name : ""}
+              type="text"
+              placeholder="Nhập tên của bạn"
+              name="name"
+              control={form2.control}
+            ></Input>
+          </Field>
+          <Field>
+            <label>Số Điện Thoại muốn thay đổi</label>
+            <Input
+              defaultValue={user ? user.numberPhone : ""}
+              type="text"
+              placeholder="Nhập số điện thoai của bạn"
+              name="numberPhone"
+              control={form2.control}
+            ></Input>
+          </Field>
+        </form>
+      </Modal>
     </DashboarchPageStyle>
   );
 }
