@@ -16,6 +16,7 @@ const {
   uploadAvarta,
   changeMail,
   ChangeInfor,
+  forget,
   findUSer,
 } = require("../controller/user.controllers");
 const { uploadImg } = require("../middleware/postImg.middleware");
@@ -30,6 +31,8 @@ userRouter.put("/user", authentication, changePassword);
 userRouter.put("/changmail", authentication, changeMail);
 userRouter.put("/changeInfor", authentication, ChangeInfor);
 userRouter.get("/findUser", authentication, author, findUSer);
+userRouter.post("/forget", forget);
+
 userRouter.post(
   "/upload_img",
   authentication,

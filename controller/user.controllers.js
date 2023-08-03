@@ -1,6 +1,7 @@
 const { User, sequelize } = require("../models");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
 const { Op } = require("sequelize");
 const register = async (req, res) => {
   try {
@@ -223,6 +224,54 @@ const changeMail = async (req, res) => {
   }
 };
 
+const forget = async (req, res) => {
+  try {
+    const { gmail } = req.body;
+    const currentUser = await User.findOne({
+      where: {
+        email: gmail,
+      },
+    });
+    if (curentUser) {
+      const password = `abc123${Math.floor(Math.random() * 10000)
+        .toString()
+        .padStart(4, "0")}`; // random password
+
+      let transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587, // the SMTP port for your provider
+        secure: false, // true for 465, false for other ports
+        auth: {
+          user: "duonghaigiang127@gmail.com", // your gmail account
+          pass: "kvuptiybvtpibreu", // your gmail password
+        },
+      });
+      const salt = bcryptjs.genSaltSync(5);
+      const hashPassword = bcryptjs.hashSync(password, salt);
+      currentUser.password = hashPassword;
+      currentUser.save();
+      let mailOptions = {
+        from: "duonghaigiang127@gmail.com", // sender address
+        to: `${gmail}`, // list of receivers
+        subject: "Request Reset your password", // Subject line
+        text: `${password}`,
+      };
+      // send mail with defined transport object
+      let info = await transporter.sendMail(mailOptions);
+
+      if (info) {
+        res.send("ĐÃ Gửi thành công bạn kiểm tra email!");
+      } else {
+        res.send("Gửi thất bại");
+      }
+    } else {
+      res.send("không tìm được email!");
+    }
+  } catch (error) {
+    res.send("không tìm được email! !");
+  }
+};
+
 module.exports = {
   ChangeInfor,
   register,
@@ -235,4 +284,5 @@ module.exports = {
   uploadAvarta,
   findUSer,
   changeMail,
+  forget,
 };

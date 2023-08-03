@@ -13,6 +13,7 @@ import HomeTrip from "./pages/home/HomeStation";
 import DashboarchListUser from "./pages/dashboarch/dashboarchListUser";
 import Posts from "./pages/posts/posts";
 import DashboarchTicket from "./pages/dashboarch/dashboarchTicket";
+import Forget from "./pages/forget/forget";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
 
           <Route path="/trip" element={<HomeTrip></HomeTrip>}></Route>
           <Route path="/loginPage" element={<LoginPages></LoginPages>}></Route>
+          <Route path="/forgetPage" element={<Forget></Forget>}></Route>
           <Route path="/" element={<Home></Home>}></Route>
           <Route element={<DashboardLayout></DashboardLayout>}>
             <Route

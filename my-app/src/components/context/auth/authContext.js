@@ -12,6 +12,7 @@ function AuthContextProvider({ children }) {
     "Bến Tre",
     "Đà Lạt",
     "Nha Trang",
+    "Hà Nội",
   ];
   const [trip, setTrip] = useState([]);
   const values = { user, setUser, setToken, Station, trip, setTrip };

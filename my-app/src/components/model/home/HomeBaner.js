@@ -49,6 +49,11 @@ const HomeBannerStyled = styled.div`
   .form {
     display: flex;
   }
+  .label {
+    font-weight: 500;
+    color: #fff;
+    font-style: italic;
+  }
 `;
 function HomeBanner(props) {
   const { Station, setTrip } = useAuth();
@@ -89,7 +94,7 @@ function HomeBanner(props) {
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="form">
                   <div>
-                    <label>address</label>
+                    <label className="label">Adress</label>
                     <Select
                       name="address"
                       register={register}
@@ -97,7 +102,7 @@ function HomeBanner(props) {
                     ></Select>
                   </div>
                   <div>
-                    <label>province</label>
+                    <label className="label">Provice</label>
                     <Select
                       name="province"
                       register={register}

@@ -12,6 +12,7 @@ import { useAuth } from "../../components/context/auth/authContext";
 import Field from "../../components/field/Field";
 import Input from "../../components/input/Input";
 import InputPassword from "./../../components/input/InputPassword";
+import { css } from "styled-components";
 import { Spin } from "antd";
 
 LoginPages.propTypes = {};
@@ -31,9 +32,11 @@ const Wrapper = styled.div`
     background-color: #fff;
   }
   .btn_footer {
+    flex-direction: column;
     display: flex;
     align-items: center;
   }
+
   .btn_footer__item {
     width: 65%;
     border: 1px solid #fff;
@@ -73,7 +76,16 @@ function LoginPages(props) {
       });
       console.log(res.data);
       if (res.data !== "Sai mật khẩu !" && res.data !== "Email khong ton tai") {
-        toast.success("Đăng nhập thành công !");
+        toast.success("Đăng nhập thành công !", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeButton: false,
+          toastId: "success-toast",
+          bodyClassName: css`
+            text-align: center;
+          `,
+        });
         // document.cookie = `token = ${res.data.token}`;
         localStorage.setItem("token", `${res.data.token}`);
         setToken(localStorage.getItem("token"));
@@ -171,9 +183,14 @@ function LoginPages(props) {
                 <Btn type="submit" className="btn_footer__item">
                   Đăng nhập
                 </Btn>
-                <NavLink to={"/registerPage"} className="btn_footer__title">
-                  Bạn chưa có tài khoản !
-                </NavLink>
+                <div className="btn_footer__item1">
+                  <NavLink to={"/registerPage"} className="btn_footer__title">
+                    Bạn chưa có tài khoản !
+                  </NavLink>
+                  <NavLink to={"/forgetPage"} className="btn_footer__title">
+                    Quên Mật Khẩu !
+                  </NavLink>
+                </div>
               </div>
             </form>
           </div>

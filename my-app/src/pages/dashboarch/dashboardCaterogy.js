@@ -21,6 +21,7 @@ const WrapperStyled = styled.div`
   justify-content: center;
 
   .tableStation {
+    font-size: 14px;
     border: 1px solid #ccc;
     background-color: #fff;
     width: 100%;

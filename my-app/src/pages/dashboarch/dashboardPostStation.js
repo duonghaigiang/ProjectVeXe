@@ -62,6 +62,10 @@ function DashboardPostStation(props) {
           <Input type="text" name="numberPhone" control={control}></Input>
         </Field>
         <Field>
+          <label>Email</label>
+          <Input type="email" name="email" control={control}></Input>
+        </Field>
+        <Field>
           <label>Description</label>
           <Input type="text" name="description" control={control}></Input>
         </Field>

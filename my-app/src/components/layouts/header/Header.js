@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Avatar, Popover } from "antd";
 
 import Btn from "./../../button/btn";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth/authContext";
 
 Header.propTypes = {};
@@ -128,6 +128,10 @@ function Header(props) {
       title: "Contact",
     },
   ];
+  const navi = useNavigate();
+  const handleNaviga = () => {
+    navi("/dashboard");
+  };
   return (
     <HeaderStyled>
       <div className="container">
@@ -194,8 +198,11 @@ function Header(props) {
               >
                 {user.avatar ? (
                   <Avatar
+                    className="avartar"
+                    onClick={handleNaviga}
                     src={user.avatar}
                     style={{
+                      cursor: "pointer",
                       backgroundColor: "#ccc",
                       verticalAlign: "middle",
                     }}
@@ -203,7 +210,10 @@ function Header(props) {
                   ></Avatar>
                 ) : (
                   <Avatar
+                    className="avartar"
+                    onClick={handleNaviga}
                     style={{
+                      cursor: "pointer",
                       backgroundColor: "#ccc",
                       verticalAlign: "middle",
                     }}

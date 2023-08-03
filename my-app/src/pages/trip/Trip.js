@@ -72,6 +72,7 @@ function Trip(props) {
   };
   const handleOk = (station) => () => {
     createTicket(station);
+    setShowModal(!showModal);
   };
   const createTicket = async (dataTicket) => {
     try {
@@ -95,6 +96,16 @@ function Trip(props) {
       toast.error("eror");
     }
   };
+  const [currentTime, setCurrentTime] = useState(new Date().toLocaleString());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(new Date().toLocaleString());
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
   return (
     <WrapperStyle>
       <Heading>Các trạm chuyến đi :{trip.length} chuyến</Heading>
@@ -118,7 +129,13 @@ function Trip(props) {
               >
                 <div>
                   <div></div>
-                  <h3>Thông tin tài khoản</h3>
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    {" "}
+                    <h3>Thông tin tài khoản</h3>
+                    <p>{currentTime}</p>
+                  </div>
                   <div>{user?.email}</div>
                   <div>{user?.name}</div>
                   <div>{user?.numberPhone}</div>

@@ -2,13 +2,14 @@ const { response } = require("express");
 const { Op } = require("sequelize");
 const { Station, sequelize } = require("../models");
 const createStation = async (req, res) => {
-  const { name, address, province, numberPhone, description } = req.body;
+  const { name, address, province, numberPhone, email, description } = req.body;
   try {
     const newStation = await Station.create({
       name,
       address,
       province,
       numberPhone,
+      email,
       description,
     });
     res.status(201).send(newStation);

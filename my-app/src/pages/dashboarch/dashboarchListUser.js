@@ -84,6 +84,11 @@ function DashboarchListUser(props) {
       method: "DELETE",
       url: `http://localhost:7000/api/v1/user/register/${id}`,
     });
+    if (res) {
+      toast.success("Xóa User Thành công!");
+    } else {
+      toast.error("Thất bại");
+    }
   };
   const local = useLocation();
   const navi = useNavigate();
