@@ -74,7 +74,7 @@ function Forget(props) {
         toast.error("lỗi");
       }
     } catch (error) {
-      toast.error("lỗi");
+      toast.error("lỗi!");
     }
   };
   return (

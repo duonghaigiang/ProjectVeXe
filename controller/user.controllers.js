@@ -227,25 +227,24 @@ const changeMail = async (req, res) => {
 const forget = async (req, res) => {
   try {
     const { gmail } = req.body;
+
     const currentUser = await User.findOne({
       where: {
         email: gmail,
       },
     });
-    if (curentUser) {
-      const password = `abc123${Math.floor(Math.random() * 10000)
-        .toString()
-        .padStart(4, "0")}`; // random password
+    if (currentUser) {
+      // Fixed typo here
+      const password = `abc123${Math.floor(Math.random() * 10000).toString()}`; // random password
 
       let transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 587, // the SMTP port for your provider
-        secure: false, // true for 465, false for other ports
+        service: "gmail",
         auth: {
-          user: "duonghaigiang127@gmail.com", // your gmail account
-          pass: "kvuptiybvtpibreu", // your gmail password
+          user: "duonghaigiang127@gmail.com",
+          pass: "yrpmkmunwzaodnii", //kvuptiybvtpibreu
         },
       });
+
       const salt = bcryptjs.genSaltSync(5);
       const hashPassword = bcryptjs.hashSync(password, salt);
       currentUser.password = hashPassword;
@@ -257,8 +256,17 @@ const forget = async (req, res) => {
         text: `${password}`,
       };
       // send mail with defined transport object
-      let info = await transporter.sendMail(mailOptions);
-
+      const info = await transporter.sendMail(
+        mailOptions,
+        function (error, info) {
+          if (error) {
+            console.log("test", error);
+          } else {
+            console.log("Email sent: " + info.response);
+          }
+        }
+      );
+      console.log("test", info);
       if (info) {
         res.send("ĐÃ Gửi thành công bạn kiểm tra email!");
       } else {
@@ -268,7 +276,7 @@ const forget = async (req, res) => {
       res.send("không tìm được email!");
     }
   } catch (error) {
-    res.send("không tìm được email! !");
+    res.send("Lỗi Server");
   }
 };
 
