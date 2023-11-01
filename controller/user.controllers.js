@@ -8,13 +8,22 @@ const register = async (req, res) => {
     const { name, email, password, numberPhone } = req.body;
     const salt = bcryptjs.genSaltSync(5);
     const hashPassword = bcryptjs.hashSync(password, salt);
+
     const newUsers = await User.create({
       name: name,
       email: email,
       password: hashPassword,
       numberPhone: numberPhone,
     });
-    res.status(200).send(newUsers);
+    res.send(newUsers);
+
+    // const newUsers = await User.create({
+    //   name: name,
+    //   email: email,
+    //   password: hashPassword,
+    //   numberPhone: numberPhone,
+    // });
+    // res.status(200).send(newUsers);
   } catch (error) {
     res.status(500).send(error);
   }
@@ -183,25 +192,62 @@ const ChangeInfor = async (req, res) => {
     res.send("Lỗi server");
   }
 };
+// const findUSer = async (req, res) => {
+//   try {
+//     const { name } = req.query;
+//     const user = await User.findAll({
+//       where: {
+//         [Op.or]: [
+//           {
+//             name: {
+//               [Op.like]: `%${name}%`,
+//             },
+//             email: {
+//               [Op.like]: `%${name}%`,
+//             },
+//           },
+//         ],
+//       },
+//     });
+//     // const [result, metadata] = await sequelize.query(
+//     //   `
+//     //   SELECT * FROM vexe.users
+//     //   WHERE name LIKE '%name%'
+//     //   OR email LIKE '%name%';`
+//     // );
+
+//     // res.send(result);
+//     if (user) {
+//       res.send(user);
+//     } else {
+//       res.send("không tìm thấy user");
+//     }
+//   } catch (error) {
+//     res.send("không lấy được name");
+//   }
+// };
 const findUSer = async (req, res) => {
   try {
     const { name } = req.query;
-    const user = await User.findAll({
-      where: {
-        name: {
-          [Op.like]: `%${name}%`,
-        },
-      },
-    });
-    if (user) {
-      res.send(user);
+
+    const [result, metadata] = await sequelize.query(
+      `
+      SELECT * FROM vexe.users
+      WHERE name LIKE '%${name}%' OR email LIKE '%${name}%';
+      `
+    );
+
+    if (result) {
+      res.send(result);
     } else {
-      res.send("không tìm thấy user");
+      res.send("Không tìm thấy user");
     }
   } catch (error) {
-    res.send("không lấy được name");
+    console.error("Error:", error);
+    res.status(500).send("Lỗi server");
   }
 };
+
 const changeMail = async (req, res) => {
   try {
     const { password, email } = req.body;

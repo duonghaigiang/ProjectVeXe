@@ -7,8 +7,9 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({ Ticket }) {
+    static associate({ Ticket, Reviewstation }) {
       this.hasMany(Ticket, { foreignKey: "user_id" });
+      this.hasMany(Reviewstation, { foreignKey: "id_user" });
       // define association here
     }
   }

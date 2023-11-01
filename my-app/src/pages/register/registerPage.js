@@ -86,9 +86,13 @@ function RegisterPage(props) {
         url: `http://localhost:7000/api/v1/user/register`,
         data: { ...value },
       });
-      console.log(" suscess data ", res.data);
-      toast.success("register Sucessfully");
-      navi("/loginPage");
+      console.log(res.data);
+      if (res.data != "user existed !!") {
+        toast.success("register Sucessfully");
+        navi("/loginPage");
+      } else {
+        toast.error("acount exist ");
+      }
       return res.data;
     } catch (error) {
       console.error(error);

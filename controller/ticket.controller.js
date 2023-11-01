@@ -5,19 +5,23 @@ const createTicket = async (req, res) => {
   try {
     const { user } = req;
     const data = req.body;
-    const createTicket = await Ticket.create({
-      user_id: user.id,
-      trip_id: data.Station_id,
-    });
-    if (createTicket) {
-      // Get the ticket details
-      const ticketDetails = await getTicketDetail(createTicket.id);
-      // Send email to the user
-      await sendTicketEmail(user.email, ticketDetails);
+    if (data.Station_Status === "con") {
+      const createTicket = await Ticket.create({
+        user_id: user.id,
+        trip_id: data.Station_id,
+      });
+      if (createTicket) {
+        // Get the ticket details
+        const ticketDetails = await getTicketDetail(createTicket.id);
+        // Send email to the user
+        //  await sendTicketEmail(user.email, ticketDetails);
 
-      res.send("Đặt vé thành công ,hãy kiểm tra hòm thư của bạn!");
+        res.send("Đặt vé thành công ,hãy kiểm tra hòm thư của bạn!");
+      } else {
+        res.send("");
+      }
     } else {
-      res.send("");
+      res.send("Station ngung!");
     }
   } catch (error) {
     res.send("lấy dữ liệu thất bại");

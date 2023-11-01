@@ -29,6 +29,17 @@ const WrapperStyle = styled.div`
     border-radius: 14px;
     border: 1px solid ${(props) => props.theme.primary};
   }
+  .blickTrip__item_ngung {
+    background-color: red;
+    color: #fff;
+    display: flex;
+    padding: 0;
+    align-items: center;
+    margin: 8px 0;
+    justify-content: space-between;
+    border-radius: 14px;
+    border: 1px solid ${(props) => props.theme.primary};
+  }
   .Item {
     padding: 14px 24px;
   }
@@ -63,9 +74,11 @@ function Trip(props) {
   const [displayedItems, loadMore, canLoadMore] = useLoadMore(trip, 3);
   const [showModal, setShowModal] = useState(false);
   const { user } = useAuth();
+  const [station, setSation] = useState({});
 
-  const handleCreateTicket = () => {
+  const handleCreateTicket = (item) => {
     setShowModal(!showModal);
+    setSation(item);
   };
   const handleCannel = () => {
     setShowModal(false);
@@ -85,10 +98,15 @@ function Trip(props) {
         },
         data: {
           Station_id: dataTicket.id,
+          Station_Status: dataTicket.status,
         },
       });
       if (res) {
-        toast.success(res.data);
+        if (res.data == "Station ngung!") {
+          toast.warning(res.data);
+        } else {
+          toast.success(res.data);
+        }
       } else {
         toast.warning("awarnig");
       }
@@ -111,20 +129,27 @@ function Trip(props) {
       <Heading>Các trạm chuyến đi :{trip.length} chuyến</Heading>
       <div className="WrappblockTrip">
         <div className="blockTrip">
-          {displayedItems.map((item) => (
-            <div key={item.id} className="blickTrip__item">
+          {displayedItems.map((item, index) => (
+            <div
+              key={item.id}
+              className={`${
+                item.status === "ngung"
+                  ? "blickTrip__item_ngung"
+                  : "blickTrip__item"
+              }`}
+            >
               <div className="Item">{item.name}</div>
               <div className="Item">{item.address}</div>
               <div className="Item">{item.numberPhone}</div>
               <div className="Item">{item.description}</div>
-              <Btn className="btn" onClick={() => handleCreateTicket()}>
+              <Btn className="btn" onClick={() => handleCreateTicket(item)}>
                 Đặt vé
               </Btn>
               <Modal
                 title="Xác Nhận Thông Tin"
                 open={showModal}
                 onCancel={handleCannel}
-                onOk={handleOk(item)}
+                onOk={handleOk(station)}
                 cancelText={false}
               >
                 <div>

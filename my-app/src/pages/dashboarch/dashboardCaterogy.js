@@ -12,6 +12,7 @@ import Input from "./../../components/input/Input";
 import { useForm } from "react-hook-form";
 import queryString from "query-string";
 import Btn from "./../../components/button/btn";
+import Select from "../../components/select/select";
 const WrapperStyled = styled.div`
   margin: 40px 35px;
   border-radius: 10px;
@@ -22,7 +23,7 @@ const WrapperStyled = styled.div`
 
   .tableStation {
     font-size: 14px;
-    border: 1px solid #ccc;
+    border: 1px solid #000;
     background-color: #fff;
     width: 100%;
     text-align: left;
@@ -31,6 +32,7 @@ const WrapperStyled = styled.div`
   .table_Row {
     padding: 10px;
     border-bottom: 1px solid #ccc;
+    color: #fff;
   }
   .table_RU {
     display: flex;
@@ -64,6 +66,27 @@ const WrapperStyled = styled.div`
     }
     .pagination {
     }
+  }
+  .blue-bg {
+    background-color: #0866ff;
+  }
+
+  .red-bg {
+    background-color: #d11013;
+  }
+  .con {
+    display: block;
+    padding: 4px;
+    width: 20px;
+    height: 20px;
+    background-color: #0866ff;
+  }
+  .ngung {
+    display: block;
+    padding: 4px;
+    background-color: #d11013;
+    height: 20px;
+    width: 20px;
   }
 `;
 DashboardCaterogy.propTypes = {};
@@ -120,6 +143,7 @@ function DashboardCaterogy(props) {
   const [dataForm, setDataForm] = useState({});
   const [updateId, setUpdateId] = useState();
   const [curentDataStation, setCurentDataStation] = useState({});
+  const statusStation = ["con", "ngung"];
   const showModalUpdate = (item) => {
     setIsModalOpen(true);
     setUpdateId(item.id);
@@ -154,6 +178,7 @@ function DashboardCaterogy(props) {
     control,
     handleSubmit,
     formState: { errors },
+    register,
   } = useForm({
     mode: "onChange",
   });
@@ -220,17 +245,40 @@ function DashboardCaterogy(props) {
               placeholder="Thay đổi tỉnh"
             ></Input>
           </Field>
+          <Field>
+            <label>Set trạng thái nhà xe</label>
+            <Select
+              name="status"
+              register={register}
+              items={statusStation}
+            ></Select>
+          </Field>
           <Btn type="submit" onClick={handleCancel}>
             Ok
           </Btn>
         </form>
       </Modal>
       <Heading>Danh Sách các Trạm hiện hành</Heading>
+      <div className="colorStation">
+        <div>
+          Hiện Hành
+          <div className="con"></div>
+        </div>
+        <div>
+          Tạm ngưng
+          <div className="ngung"></div>
+        </div>
+      </div>
       <WrapperStyled>
         {user.type === "admin" ? (
           <div>
             {station.map((item, index) => (
-              <tr key={item.id} className="tableStation">
+              <tr
+                key={item.id}
+                className={`tableStation ${
+                  item.status == "con" ? "blue-bg" : "red-bg"
+                }  `}
+              >
                 <td className="table_Row">{page * pageSize + index}</td>
                 <td className="table_Row">{item.name}</td>
                 <td className="table_Row">{item.address}</td>
@@ -258,7 +306,12 @@ function DashboardCaterogy(props) {
         ) : (
           <div>
             {station.map((item, index) => (
-              <tr key={item.id} className="tableStation">
+              <tr
+                key={item.id}
+                className={`tableStation ${
+                  item.status == "con" ? "blue-bg" : "red-bg"
+                }  `}
+              >
                 <td className="table_Row">{page * pageSize + index}</td>
                 <td className="table_Row">{item.name}</td>
                 <td className="table_Row">{item.address}</td>
