@@ -43,6 +43,7 @@ const getTicket = async (req, res) => {
       `
     );
     // }
+    //
     res.send(result);
     return result;
   } catch (error) {
